@@ -1,0 +1,13 @@
+{
+  "name": "cold-email-harness",
+  "version": "1.0.0",
+  "description": "Cold email variant generator - Podcast Method with Campaign DNA constraints",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

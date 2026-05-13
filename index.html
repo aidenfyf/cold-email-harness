@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cold Email Harness - Podcast Method</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0f0d;
+      --surface: #111916;
+      --surface-hover: #1a2420;
+      --border: #1e2e27;
+      --border-focus: #3d7a5a;
+      --text: #e8ede9;
+      --text-muted: #7a9186;
+      --accent: #4ade80;
+      --accent-dim: #22543d;
+      --error: #ef4444;
+      --font: 'DM Sans', sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    header {
+      margin-bottom: 48px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent-dim);
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .field input {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: var(--font);
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .field input:focus {
+      border-color: var(--border-focus);
+    }
+
+    .field input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    .instantly-row {
+      margin-bottom: 24px;
+    }
+
+    .instantly-row .field {
+      grid-column: span 2;
+    }
+
+    .instantly-row input {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-muted);
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+
+    .instantly-row input:focus {
+      border-color: var(--border-focus);
+      color: var(--text);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover { opacity: 0.9; }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .status {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .status .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 12px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 14px 16px;
+      color: var(--error);
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    /* Results */
+    .results {
+      margin-top: 48px;
+    }
+
+    .results h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .results .meta {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-bottom: 32px;
+      font-family: var(--mono);
+    }
+
+    .research-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+
+    .research-block h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .research-block pre {
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--text-muted);
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      line-height: 1.7;
+    }
+
+    .variant-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .variant-card:hover {
+      border-color: var(--border-focus);
+    }
+
+    .variant-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .variant-header .fw-num {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .variant-header .subject {
+      font-size: 14px;
+      font-weight: 500;
+      flex: 1;
+      margin-left: 14px;
+    }
+
+    .variant-header .copy-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .variant-header .copy-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .variant-body {
+      display: none;
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .variant-body.open {
+      display: block;
+    }
+
+    .variant-body pre {
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      color: var(--text);
+      padding-top: 16px;
+    }
+
+    .instantly-status {
+      margin-top: 24px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .instantly-status.success {
+      border-color: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">PODCAST METHOD v2.0</div>
+      <h1>Cold Email Harness</h1>
+      <p>10 data-backed variants for any niche. Campaign DNA constraints built in.</p>
+    </header>
+
+    <div id="app">
+      <div class="form-grid">
+        <div class="field">
+          <label>Niche</label>
+          <input type="text" id="niche" placeholder="e.g. HVAC contractors">
+        </div>
+        <div class="field">
+          <label>Country</label>
+          <input type="text" id="country" placeholder="e.g. US">
+        </div>
+        <div class="field">
+          <label>Client Name</label>
+          <input type="text" id="clientName" placeholder="e.g. James Keeble">
+        </div>
+        <div class="field">
+          <label>Company Name</label>
+          <input type="text" id="companyName" placeholder="e.g. Acquisity">
+        </div>
+      </div>
+
+      <div class="instantly-row">
+        <div class="field">
+          <label>Instantly Campaign ID (optional - auto-push)</label>
+          <input type="text" id="campaignId" placeholder="Leave blank to skip Instantly push">
+        </div>
+      </div>
+
+      <button class="btn" id="generateBtn" onclick="generate()">
+        Generate 10 Variants
+      </button>
+
+      <div id="status" style="display:none"></div>
+      <div id="error" style="display:none"></div>
+      <div id="results" style="display:none"></div>
+    </div>
+
+    <footer>
+      Cold Email Harness - Keeble Frameworks + Campaign DNA &middot; 8INMEDIA
+    </footer>
+  </div>
+
+  <script>
+    async function generate() {
+      const niche = document.getElementById('niche').value.trim();
+      const country = document.getElementById('country').value.trim();
+      const clientName = document.getElementById('clientName').value.trim();
+      const companyName = document.getElementById('companyName').value.trim();
+      const campaignId = document.getElementById('campaignId').value.trim();
+
+      if (!niche || !country || !clientName || !companyName) {
+        showError('Fill in all four required fields.');
+        return;
+      }
+
+      const btn = document.getElementById('generateBtn');
+      btn.disabled = true;
+      btn.textContent = 'Generating...';
+      hideError();
+      hideResults();
+      showStatus('Researching niche and generating 10 variants... this takes 30-60 seconds.');
+
+      try {
+        const response = await fetch('/api/generate-variants', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ niche, country, clientName, companyName, campaignId: campaignId || undefined })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Request failed');
+        }
+
+        hideStatus();
+        renderResults(data);
+
+      } catch (err) {
+        hideStatus();
+        showError(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Generate 10 Variants';
+      }
+    }
+
+    function renderResults(data) {
+      const el = document.getElementById('results');
+      let html = '<div class="results">';
+      html += '<h2>Results</h2>';
+      html += `<div class="meta">${data.niche} / ${data.country} / ${data.clientName} / ${data.companyName}</div>`;
+
+      // Research summary
+      if (data.researchSummary) {
+        html += '<div class="research-block">';
+        html += '<h3>Niche Research</h3>';
+        html += `<pre>${escapeHtml(data.researchSummary)}</pre>`;
+        html += '</div>';
+      }
+
+      // Variants
+      if (data.variants && data.variants.length) {
+        data.variants.forEach((v, i) => {
+          const id = `variant-${i}`;
+          html += '<div class="variant-card">';
+          html += `<div class="variant-header" onclick="toggleVariant('${id}')">`;
+          html += `<span class="fw-num">FW${v.framework_number}</span>`;
+          html += `<span class="subject">${escapeHtml(v.subject_line)}</span>`;
+          html += `<button class="copy-btn" onclick="event.stopPropagation(); copyVariant(${i})">Copy</button>`;
+          html += '</div>';
+          html += `<div class="variant-body" id="${id}">`;
+          html += `<pre>${escapeHtml(v.full_email || v.email_body)}</pre>`;
+          html += '</div>';
+          html += '</div>';
+        });
+      } else {
+        // Fallback - show raw response
+        html += '<div class="research-block">';
+        html += '<h3>Raw Output</h3>';
+        html += `<pre>${escapeHtml(data.rawResponse || 'No output received')}</pre>`;
+        html += '</div>';
+      }
+
+      // Instantly push status
+      if (data.instantlyResult) {
+        const ir = data.instantlyResult;
+        const isSuccess = ir.pushed > 0;
+        html += `<div class="instantly-status ${isSuccess ? 'success' : ''}">`;
+        html += `Instantly: ${ir.pushed} pushed / ${ir.failed} failed`;
+        html += '</div>';
+      }
+
+      html += '</div>';
+      el.innerHTML = html;
+      el.style.display = 'block';
+
+      // Store variants globally for copy function
+      window._variants = data.variants || [];
+    }
+
+    function toggleVariant(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('open');
+    }
+
+    function copyVariant(index) {
+      const v = window._variants[index];
+      if (!v) return;
+      const text = `Subject: ${v.subject_line}\n\n${v.full_email || v.email_body}`;
+      navigator.clipboard.writeText(text).then(() => {
+        const btns = document.querySelectorAll('.copy-btn');
+        if (btns[index]) {
+          btns[index].textContent = 'Copied';
+          setTimeout(() => { btns[index].textContent = 'Copy'; }, 1500);
+        }
+      });
+    }
+
+    function showStatus(msg) {
+      const el = document.getElementById('status');
+      el.innerHTML = `<div class="status"><div class="spinner"></div><br>${msg}</div>`;
+      el.style.display = 'block';
+    }
+
+    function hideStatus() {
+      document.getElementById('status').style.display = 'none';
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('error');
+      el.innerHTML = `<div class="error">${escapeHtml(msg)}</div>`;
+      el.style.display = 'block';
+    }
+
+    function hideError() {
+      document.getElementById('error').style.display = 'none';
+    }
+
+    function hideResults() {
+      document.getElementById('results').style.display = 'none';
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
