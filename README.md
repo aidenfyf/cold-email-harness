@@ -38,10 +38,10 @@ Open the deployed URL. Fill in the four fields (niche, country, client name, com
 curl -X POST https://your-domain.vercel.app/api/generate-variants \
   -H "Content-Type: application/json" \
   -d '{
-    "niche": "HVAC contractors",
+    "niche": "B2B SaaS",
     "country": "US",
-    "clientName": "James Keeble",
-    "companyName": "Acquisity"
+    "clientName": "John Doe",
+    "companyName": "Growth Partners Inc"
   }'
 ```
 
@@ -74,5 +74,4 @@ The system prompt lives in `api/system-prompt.js` as an exported string. Edit it
 ---
 
 *System version: Cold Email Harness v1.0*
-*Architecture: Keeble frameworks + Campaign DNA constraint layer*
-*Built by: 8INMEDIA*
+*Architecture: Podcast Method + Campaign DNA constraint layer*
