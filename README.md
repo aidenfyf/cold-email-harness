@@ -2,6 +2,8 @@
 
 Generates 10 data-backed cold email variants for podcast guest outreach across any niche. Built with campaign DNA constraints extracted from a 14.63% PRR campaign.
 
+Note: If you want only to use the skill, download the zipped folder (do not unzip) and upload directly to LLM of choice
+
 ## Stack
 
 - Frontend: Pure HTML / CSS / JS
